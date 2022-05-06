@@ -4,7 +4,7 @@
   "description": "returns cached repositories",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "PORT=80 nodemon index.js",
     "test": ""
   },
   "repository": {
@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/garbagemza/argos-repository-cache-job#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "http-errors": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }
