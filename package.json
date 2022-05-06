@@ -4,7 +4,7 @@
   "description": "returns cached repositories",
   "main": "index.js",
   "scripts": {
-    "start": "PORT=80 nodemon index.js",
+    "start": "WORKDIR=/Users/mauroaz/Documents/data/argos PORT=80 nodemon index.js",
     "test": ""
   },
   "repository": {

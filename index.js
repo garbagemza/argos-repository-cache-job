@@ -1,9 +1,12 @@
+const { envcheck } = require('./utilities')
 const express = require('express')
 const createError = require('http-errors')
 
 const { getRepository } = require('./controllers')
 
 const app = express()
+
+envcheck()
 
 app.get('/repositories/:user/:repo/:tag', getRepository)
 
