@@ -1,0 +1,23 @@
+{
+  "name": "argos-repository-cache-job",
+  "version": "1.0.0",
+  "description": "returns cached repositories",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/garbagemza/argos-repository-cache-job.git"
+  },
+  "author": "garbagemza",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/garbagemza/argos-repository-cache-job/issues"
+  },
+  "homepage": "https://github.com/garbagemza/argos-repository-cache-job#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
