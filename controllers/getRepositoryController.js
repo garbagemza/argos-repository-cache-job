@@ -7,28 +7,35 @@ module.exports = function (req, res) {
 
     const baseDir = process.env.WORKDIR
     const userDir = baseDir + '/' + params.user
+    const repoDir = userDir + '/' + params.repo
 
-    checkDirectory(userDir, (err) => {
-        handleDirectoryExistence(err, res, function() {
-            res.send('OK')
-        })
+    checkDirectory(userDir, res, function () {
+        res.send('OK')
     })
 }
 
-function checkDirectory(dir, callback) {
+function checkDirectory(dir, res, ok) {
+    locateDirectory(dir, (err) => {
+        handleDirectoryExistence(err, res, function () {
+            ok()
+        })
+    })
+
+}
+function locateDirectory(dir, callback) {
     console.log('locating directory: ' + dir)
     fs.access(dir, function (err) {
         callback(err)
     });
 }
 
-function handleDirectoryExistence(err, res, callback) {
+function handleDirectoryExistence(err, res, ok) {
     if (err) {
         console.log('location not found.')
         res.status(404)
         res.send(new createError(404))
     } else {
         console.log('location found.')
-        callback()
+        ok()
     }
 }
