@@ -5,16 +5,7 @@ module.exports = function (req, res) {
     const params = req.params
     console.log(params)
 
-    const { userDir, repoDir, tagDir} = repositoryService.getDirectories(params)
-
-    const dirArray = [userDir, repoDir, tagDir]
-    const results = dirArray.map(function(dir) {
-        return repositoryService.checkDirectory(dir)
-    })
-
-    const ok = results.reduce(function(acc, value) {
-        return acc && value
-    }, true)
+    const ok = repositoryService.checkDirectories(params)
 
     if (ok)
         res.send('OK')
