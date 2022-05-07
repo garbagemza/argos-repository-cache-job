@@ -10,7 +10,9 @@ module.exports = function (req, res) {
     const repoDir = userDir + '/' + params.repo
 
     checkDirectory(userDir, res, function () {
-        res.send('OK')
+        checkDirectory(repoDir, res, function () {
+            res.send('OK')
+        })
     })
 }
 
