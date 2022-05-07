@@ -3,6 +3,9 @@ const crypto = require('crypto');
 const jsonfile = require('jsonfile');
 const createError = require('http-errors');
 
+const metadataFile = '/metadata.json'
+const archiveFile = '/archive'
+
 function getArchive(params) {
     const directoriesOk = checkDirectories(params)
     if (!directoriesOk)
@@ -36,11 +39,22 @@ function postArchive(request, params) {
     if (!checkFileExistence(tagDir))
         makeDirectory(tagDir)
 
-    const archivePath = tagDir + '/archive'
+    const archivePath = tagDir + archiveFile
+    const metadataPath = tagDir + metadataFile
+
     console.log('creating file contents into file:' + archivePath)
     request.pipe(fs.createWriteStream(archivePath))
     console.log('file created.')
-    return {}
+
+    const sha256 = getHexSha256HashFromFile(archivePath)
+    const metadata = {
+        sha256: sha256
+    }
+    console.log('creating file contents info file: ' + metadataPath)
+    jsonfile.writeFileSync(metadataPath, metadata)
+    console.log('file created.')
+
+    return metadata
 }
 
 function checkDirectories(params) {
@@ -58,8 +72,8 @@ function checkDirectories(params) {
 
 function getMetadataHealth(params) {
     const { tagDir } = getDirectories(params)
-    const metadataPath = tagDir + '/metadata.json'
-    const archivePath = tagDir + '/archive'
+    const metadataPath = tagDir + metadataFile
+    const archivePath = tagDir + archiveFile
 
     const files = [metadataPath, archivePath]
     const results = files.map(function(path) {
