@@ -1,5 +1,5 @@
-const fs = require('fs');
-const createError = require('http-errors');
+const fs = require('fs')
+const createError = require('http-errors')
 
 module.exports = function (req, res) {
     const params = req.params
@@ -8,10 +8,13 @@ module.exports = function (req, res) {
     const baseDir = process.env.WORKDIR
     const userDir = baseDir + '/' + params.user
     const repoDir = userDir + '/' + params.repo
+    const tagDir = repoDir + '/' + params.tag
 
     checkDirectory(userDir, res, function () {
         checkDirectory(repoDir, res, function () {
-            res.send('OK')
+            checkDirectory(tagDir, res, function () {
+                res.send('OK')
+            })
         })
     })
 }
@@ -28,7 +31,7 @@ function locateDirectory(dir, callback) {
     console.log('locating directory: ' + dir)
     fs.access(dir, function (err) {
         callback(err)
-    });
+    })
 }
 
 function handleDirectoryExistence(err, res, ok) {
