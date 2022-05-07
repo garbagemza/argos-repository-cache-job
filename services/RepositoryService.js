@@ -2,17 +2,25 @@ const fs = require('fs')
 const crypto = require('crypto');
 const jsonfile = require('jsonfile')
 
+function getArchive(params) {
+    const directoriesOk = checkDirectories(params)
+    if (!directoriesOk)
+        return null
+
+    return getMetadataHealth(params)
+
+}
 
 function getMetadata(params) {
     const directoriesOk = checkDirectories(params)
     if (!directoriesOk)
         return null
     
-    const metadata = getMetadataHealth(params)
-    if (metadata == null)
+    const result = getMetadataHealth(params)
+    if (result == null)
         return null
     
-    return metadata
+    return result.metadata
 }
 
 function checkDirectories(params) {
@@ -51,7 +59,10 @@ function getMetadataHealth(params) {
         console.log('SHA256 digest values do not match.')
         return null
     }
-    return metadata
+
+    const archive = fs.readFileSync(archivePath)
+
+    return { metadata, archive }
 }
 
 function checkFileExistence(dir) {
@@ -97,7 +108,6 @@ function checkMetadata(metadata) {
 
 function getHexSha256HashFromFile(path) {
     console.log('calculating hash sha256 from file ' + path)
-
     const fileBuffer = fs.readFileSync(path)
     const hashSum = crypto.createHash('sha256')
     hashSum.update(fileBuffer)
@@ -108,7 +118,6 @@ function getHexSha256HashFromFile(path) {
 }
 
 module.exports = {
-    getDirectories,
-    checkDirectories,
+    getArchive,
     getMetadata
 }
