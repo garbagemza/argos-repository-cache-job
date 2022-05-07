@@ -1,17 +1,19 @@
 require('dotenv').config();
-
 const express = require('express')
-const fs = require('fs')
 const createError = require('http-errors')
 
 const { envcheck } = require('./utilities')
 
-const { getRepository } = require('./controllers')
+const { 
+	getRepository,
+	getRepositoryMetadata
+} = require('./controllers')
 
 const app = express()
 
 envcheck()
 
+app.get('/repositories/:user/:repo/:tag/metadata', getRepositoryMetadata)
 app.get('/repositories/:user/:repo/:tag', getRepository)
 
 app.use((req, res, next) => {

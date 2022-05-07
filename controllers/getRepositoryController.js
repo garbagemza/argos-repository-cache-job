@@ -13,7 +13,7 @@ module.exports = function (req, res) {
     checkDirectory(userDir, res, function () {
         checkDirectory(repoDir, res, function () {
             checkDirectory(tagDir, res, function () {
-                res.send('OK')
+                prepareResponse(res)
             })
         })
     })
@@ -43,4 +43,8 @@ function handleDirectoryExistence(err, res, ok) {
         console.log('location found.')
         ok()
     }
+}
+
+function prepareResponse(res) {
+    res.send('OK')
 }
