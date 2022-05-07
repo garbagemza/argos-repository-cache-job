@@ -1,6 +1,7 @@
 const fs = require('fs')
 const crypto = require('crypto');
-const jsonfile = require('jsonfile')
+const jsonfile = require('jsonfile');
+const createError = require('http-errors');
 
 function getArchive(params) {
     const directoriesOk = checkDirectories(params)
@@ -21,6 +22,25 @@ function getMetadata(params) {
         return null
     
     return result.metadata
+}
+
+function postArchive(request, params) {
+    const { userDir, repoDir, tagDir} = getDirectories(params)
+
+    if (!checkFileExistence(userDir))
+        makeDirectory(userDir)
+
+    if (!checkFileExistence(repoDir))
+        makeDirectory(repoDir)
+
+    if (!checkFileExistence(tagDir))
+        makeDirectory(tagDir)
+
+    const archivePath = tagDir + '/archive'
+    console.log('creating file contents into file:' + archivePath)
+    request.pipe(fs.createWriteStream(archivePath))
+    console.log('file created.')
+    return {}
 }
 
 function checkDirectories(params) {
@@ -117,7 +137,14 @@ function getHexSha256HashFromFile(path) {
     return value
 }
 
+function makeDirectory(path) {
+    console.log('attempting to make directory: ' + path)
+    fs.mkdirSync(path)
+    console.log('directory created.')
+}
+
 module.exports = {
     getArchive,
+    postArchive,
     getMetadata
 }

@@ -6,6 +6,7 @@ const { envcheck } = require('./utilities')
 
 const { 
 	getRepository,
+	postRepository,
 	getRepositoryMetadata
 } = require('./controllers')
 
@@ -15,6 +16,7 @@ envcheck()
 
 app.get('/repositories/:user/:repo/:tag/metadata', getRepositoryMetadata)
 app.get('/repositories/:user/:repo/:tag', getRepository)
+app.post('/repositories/:user/:repo/:tag', postRepository)
 
 app.use((req, res, next) => {
 	res.status(404)
