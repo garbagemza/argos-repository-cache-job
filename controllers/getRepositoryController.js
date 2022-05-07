@@ -1,50 +1,27 @@
-const fs = require('fs')
 const createError = require('http-errors')
+const { repositoryService } = require('../services')
 
 module.exports = function (req, res) {
     const params = req.params
     console.log(params)
 
-    const baseDir = process.env.WORKDIR
-    const userDir = baseDir + '/' + params.user
-    const repoDir = userDir + '/' + params.repo
-    const tagDir = repoDir + '/' + params.tag
+    const { userDir, repoDir, tagDir} = repositoryService.getDirectories(params)
 
-    checkDirectory(userDir, res, function () {
-        checkDirectory(repoDir, res, function () {
-            checkDirectory(tagDir, res, function () {
-                prepareResponse(res)
-            })
-        })
-    })
-}
-
-function checkDirectory(dir, res, ok) {
-    locateDirectory(dir, (err) => {
-        handleDirectoryExistence(err, res, function () {
-            ok()
-        })
+    const dirArray = [userDir, repoDir, tagDir]
+    const results = dirArray.map(function(dir) {
+        return repositoryService.checkDirectory(dir)
     })
 
-}
-function locateDirectory(dir, callback) {
-    console.log('locating directory: ' + dir)
-    fs.access(dir, function (err) {
-        callback(err)
-    })
-}
+    console.log(results)
 
-function handleDirectoryExistence(err, res, ok) {
-    if (err) {
-        console.log('location not found.')
+    const ok = results.reduce(function(acc, value) {
+        return acc && value
+    }, true)
+
+    if (ok)
+        res.send('OK')
+    else {
         res.status(404)
         res.send(new createError(404))
-    } else {
-        console.log('location found.')
-        ok()
     }
-}
-
-function prepareResponse(res) {
-    res.send('OK')
 }
