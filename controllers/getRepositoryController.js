@@ -12,8 +12,6 @@ module.exports = function (req, res) {
         return repositoryService.checkDirectory(dir)
     })
 
-    console.log(results)
-
     const ok = results.reduce(function(acc, value) {
         return acc && value
     }, true)
