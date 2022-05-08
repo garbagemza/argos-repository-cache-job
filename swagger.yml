@@ -5,14 +5,20 @@ info:
 servers:
   - url: http://localhost
 paths:
-  /repositories/garbagemza/repo/tag:
+  /repositories/user/repo/tag:
     get:
       description: 'retrieves archive from user, repo and tag'
       responses:
         '200':
           description: OK
     post:
-      description: 'adds an archive and stores a json metadata file'
+      description: 'adds an archive and a json metadata file at /user/repo/tag'
       responses:
         '200':
           description: OK
+  /repositories/user/repo/tag/metadata:
+    get:
+      description: 'retrieves metadata about archive stored at /user/repo/tag'
+      responses:
+        '200':
+          description: 'data'
