@@ -27,7 +27,7 @@ function getMetadata(params) {
     return result.metadata
 }
 
-function postArchive(request, params) {
+function postArchive(request, params, callback) {
     const { userDir, repoDir, tagDir} = getDirectories(params)
 
     if (!checkFileExistence(userDir))
@@ -42,19 +42,24 @@ function postArchive(request, params) {
     const archivePath = tagDir + archiveFile
     const metadataPath = tagDir + metadataFile
 
-    console.log('creating file contents into file:' + archivePath)
-    request.pipe(fs.createWriteStream(archivePath))
-    console.log('file created.')
+    createArchiveFromRequest(request, archivePath, function () {
+        const sha256 = getHexSha256HashFromFile(archivePath)
+        const metadata = {
+            sha256: sha256
+        }
+        console.log('creating file contents info file: ' + metadataPath)
+        jsonfile.writeFileSync(metadataPath, metadata)
+        console.log('file created.')
+        callback(metadata)
+    })
+}
 
-    const sha256 = getHexSha256HashFromFile(archivePath)
-    const metadata = {
-        sha256: sha256
-    }
-    console.log('creating file contents info file: ' + metadataPath)
-    jsonfile.writeFileSync(metadataPath, metadata)
-    console.log('file created.')
-
-    return metadata
+function createArchiveFromRequest(request, path, done) {
+    console.log('creating file contents into file:' + path)
+    request.pipe(fs.createWriteStream(path)).on('finish', function() {
+        console.log('file created.')
+        done()
+    })
 }
 
 function checkDirectories(params) {

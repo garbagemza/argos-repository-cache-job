@@ -5,11 +5,12 @@ module.exports = function (req, res) {
     const params = req.params
     console.log(params)
 
-    const result = repositoryService.postArchive(req, params)
-    if (result instanceof Error) {
-        res.status(result.status)
-        res.send(result)
-    } else {
-        res.json(result)
-    }
+    repositoryService.postArchive(req, params, function(result) {
+        if (result instanceof Error) {
+            res.status(result.status)
+            res.send(result)
+        } else {
+            res.json(result)
+        }    
+    })
 }
