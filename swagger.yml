@@ -7,10 +7,12 @@ servers:
 paths:
   /repositories/garbagemza/repo/tag:
     get:
+      description: 'retrieves archive from user, repo and tag'
       responses:
         '200':
           description: OK
     post:
+      description: 'adds an archive and stores a json metadata file'
       responses:
         '200':
           description: OK
