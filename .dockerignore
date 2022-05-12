@@ -1,0 +1,7 @@
+mode_modules
+*.dockerfile
+*.env
+.git
+.gitignore
+
+
