@@ -20,7 +20,7 @@ app.post('/repositories/:user/:repo/:tag', postRepository)
 
 app.get('/health', (req, res) => {
 	res.status(200)
-	res.send("OKAS")
+	res.send("OK")
 })
 
 app.use((req, res, next) => {
