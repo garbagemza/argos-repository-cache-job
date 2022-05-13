@@ -23,7 +23,6 @@ app.get('/health', (req, res) => {
 	res.send("OK")
 })
 
-
 app.use((req, res, next) => {
 	res.status(404)
 	res.json(new createError(404, "Not found."))
