@@ -18,6 +18,12 @@ app.get('/repositories/:user/:repo/:tag/metadata', getRepositoryMetadata)
 app.get('/repositories/:user/:repo/:tag', getRepository)
 app.post('/repositories/:user/:repo/:tag', postRepository)
 
+app.get('/health', (req, res) => {
+	res.status(200)
+	res.send("OK")
+})
+
+
 app.use((req, res, next) => {
 	res.status(404)
 	res.json(new createError(404, "Not found."))
